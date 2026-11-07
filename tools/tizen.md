@@ -11,17 +11,18 @@ So what is this? The same page proposes that a realistic Tizen cleanup would be 
 remote keys plus DNS, rather than debloat plus a launcher". This tool is the part of that which
 was verified to work on a real set: the remote socket on port 8002.
 
-Verified on a Samsung UA50MU7000 (7 Series 50", `17_KANTM_UHD_BASIC`, Tizen, Developer Mode off).
+Verified on a Samsung UA50MU7000 (7 Series 50", `17_KANTM_UHD_BASIC`, Tizen, Developer Mode off),
+every subcommand run against that set and checked on the screen.
 
 ## What works
 
-| Command | What it does | Needs pairing |
-|---|---|---|
-| `--probe` | Model, OS, firmware, developer mode, over plain HTTP on 8001 | no |
-| `--pair` | One "Allow" prompt on the TV, stores a token for later | the prompt |
-| `--apps` | Lists installed apps with their launchable ids | yes |
-| `--launch <id>` | Launches an app by id | yes |
-| `--key KEY_... ` | Sends remote key presses | yes |
+| Command | What it does | Needs pairing | Verified |
+|---|---|---|---|
+| `--probe` | Model, OS, firmware, developer mode, over plain HTTP on 8001 | no | yes |
+| `--pair` | One "Allow" prompt on the TV, stores a token for later | the prompt | yes, token reused with no second prompt |
+| `--apps` | Lists installed apps with their launchable ids | yes | yes, 14 apps returned |
+| `--launch <id>` | Launches an app by id | yes | yes, app opened on screen |
+| `--key KEY_... ` | Sends remote key presses | yes | yes, `KEY_MENU` opened the settings menu |
 
 ```sh
 export TV_HOST=192.168.1.7
