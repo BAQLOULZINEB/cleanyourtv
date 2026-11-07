@@ -70,3 +70,37 @@ screen. It is not for a script that walks a menu unattended. Nothing in this too
 
 For the full CleanYourTV experience on a Samsung set, the honest answer is an Android TV or Google
 TV device on an HDMI input. That device is supported by this repo; the TV is not.
+
+## A clean home screen on Tizen is possible, just not from here
+
+Worth writing down, because "no ADB" is easy to read as "nothing can be done". A *signed Tizen
+app* can give a Samsung set an ad-free home screen. [Free My TV](https://github.com/simbasjungles/free-my-tv)
+does exactly that and supports Tizen from 2015 on; SHOWCASE.md already cites it for its look.
+It is a sideloaded app, not a debloat and not a Home takeover: Samsung's home screen stays, and
+the TV is told to start into the app instead. Nothing is rooted or removed.
+
+Installed and confirmed running on the UA50MU7000 (Tizen 3.0) this page's notes come from, so the
+route is real on a 2017 set. It needs Developer Mode on (Apps, then `1 2 3 4 5` on the remote,
+this computer's IP as Host PC IP, restart), which opens SDB on 26101.
+
+Three things cost hours on Windows, none of them documented where they bite:
+
+- **Developer Mode cannot be switched on over the network.** Smart Hub's `1 2 3 4 5` prompt
+  ignores keys from the remote socket, as `Click` and as `Press`/`Release`, while `KEY_MENU` and
+  app launches on the same socket work. It wants the physical remote, an on-screen number pad or a
+  USB keyboard. So `--key` cannot bootstrap the very mode that the install path needs.
+- **Tizen CLI 2.5.25 is broken on JDK 17.** `org.tizen.common.util.CipherUtil` reads
+  `com.sun.org.apache.xerces.internal.impl.dv.util.Base64`, which Java 9+ encapsulates, so it
+  throws `IllegalAccessError` while handling the certificate password and falls back to prompting
+  for it forever. Run it with
+  `JAVA_TOOL_OPTIONS=--add-exports=java.xml/com.sun.org.apache.xerces.internal.impl.dv.util=ALL-UNNAMED`.
+- **A UTF-8 BOM in a password silently breaks signing.** PowerShell's `Set-Content -Encoding utf8`
+  writes one, and the CLI reads those three bytes as part of the password: 25 bytes for a
+  22-character password, and a wrong password with no error that says so.
+
+With the JDK flag in place, plain passwords written straight into `profiles.xml` are accepted and
+`tizen package -t wgt -s <profile>` signs without prompting. Without the flag the same file throws.
+Both pieces are needed, which is what makes this one hard to find: testing either alone says no.
+
+A TV that has gone into deep standby (8001 and 8002 closed, not just idle) answers a Wake-on-LAN
+magic packet to the MAC that `--probe` reports, so a sleeping set does not need the remote either.
