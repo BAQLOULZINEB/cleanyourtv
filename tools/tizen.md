@@ -25,7 +25,7 @@ every subcommand run against that set and checked on the screen.
 | `--key KEY_... ` | Sends remote key presses | yes | yes, `KEY_MENU` opened the settings menu |
 
 ```sh
-export TV_HOST=192.168.1.7
+export TV_HOST=192.168.1.50
 
 tools/tizen.py --probe
 tools/tizen.py --pair          # accept the prompt on the TV, once

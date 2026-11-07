@@ -6,7 +6,7 @@ This is NOT the Android TV path. Tizen sets have no ADB, so there is no
 What this does is the half that works: pair once, then read the TV, list its
 installed apps and launch one by id, or send remote keys.
 
-    export TV_HOST=192.168.1.7
+    export TV_HOST=192.168.1.50
 
     tools/tizen.py --probe              # model, OS, developer mode
     tools/tizen.py --pair               # accept the prompt on the TV, stores a token
